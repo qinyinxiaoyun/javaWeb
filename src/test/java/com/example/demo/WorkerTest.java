@@ -1,12 +1,12 @@
 package com.example.demo;
 
-import com.example.service.WorkerRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.cache.CacheManager;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
@@ -14,7 +14,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class WorkerTest {
     @Autowired
     private WorkerRepository WorkerRepository;
+    @Autowired
+    private CacheManager cacheManager;
     @Test
+    @Rollback
     public void Test() throws Exception{
         // 创建10条记录
         WorkerRepository.save(new Worker("AAA", 10));
@@ -46,6 +49,17 @@ public class WorkerTest {
         // 测试findAll, 查询所有记录, 验证上面的删除是否成功
         Assert.assertEquals(9, WorkerRepository.findAll().size());
 
+    }
+
+    @Test
+    @Rollback
+    public void test2() throws Exception{
+        WorkerRepository.save(new Worker("qqq",10));
+        System.out.println(cacheManager.getClass());
+        Worker w1 = WorkerRepository.findByName("qqq");
+        System.out.println("first" + w1.getAge());
+        Worker w2 = WorkerRepository.findByName("qqq");
+        System.out.println("second" + w2.getAge());
     }
 
 }
