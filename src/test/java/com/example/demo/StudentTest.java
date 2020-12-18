@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest
-//@Transactional
+@Transactional
 //@MapperScan(basePackages = {"com.example.service"})
 public class StudentTest {
 
@@ -27,9 +27,19 @@ public class StudentTest {
         @Test
         @Rollback
         public void test() throws Exception {
-            studentMapper.insert("AAA", 20);
+            // insert一条数据，并select出来验证
+            studentMapper.insert("AA", 20);
             Student u = studentMapper.findByName("AAA");
             Assert.assertEquals(20, u.getAge().intValue());
+            // update一条数据，并select出来验证
+            u.setAge(30);
+            studentMapper.update(u);
+            u = studentMapper.findByName("AAA");
+            Assert.assertEquals(30, u.getAge().intValue());
+            // 删除这条数据，并select验证
+            studentMapper.delete(u.getId());
+            u = studentMapper.findByName("AAA");
+            Assert.assertEquals(null, u);
         }
 
 }
