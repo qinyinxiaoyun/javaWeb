@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
-//@MapperScan(basePackages = {"com.example.service"})
+@MapperScan(basePackages = {"com.example.service"})
 public class StudentTest {
 
         @Autowired
