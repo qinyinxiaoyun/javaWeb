@@ -23,7 +23,7 @@ public class User {
     @NotNull
     @Max(100)
     private Integer age;
-    User(String name,int age){
+    public User(String name,int age){
         this.age = age;
 
         this.name = name;
